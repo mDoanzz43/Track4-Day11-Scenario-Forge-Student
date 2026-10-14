@@ -10,20 +10,20 @@ from avsim import space
 
 def cem_update(Z, Bn, score, prev: dict, rho: float = 0.1, smooth: float = 0.7, min_std: float = 0.25,
                p_clip=(0.03, 0.97)) -> dict:
-    """TODO 5. One cross-entropy step. Keep the elite = the top ceil(rho * n) rows by score (at least 2;
-    higher score = more dangerous; on equal scores the earlier row wins, i.e. np.argsort(-score, kind="stable")),
-    then return a new proposal dict:
+    n_elite = max(2, int(math.ceil(rho * len(score))))
+    elite_idx = np.argsort(-np.asarray(score), kind="stable")[:n_elite]
+    elite_z = np.asarray(Z)[elite_idx]
+    elite_b = np.asarray(Bn)[elite_idx]
+    mean = smooth * elite_z.mean(axis=0) + (1.0 - smooth) * np.asarray(prev["mean"])
+    std = smooth * elite_z.std(axis=0) + (1.0 - smooth) * np.asarray(prev["std"])
+    p_bin = smooth * elite_b.mean(axis=0) + (1.0 - smooth) * np.asarray(prev["p_bin"])
+    return dict(
+        mean=mean,
+        std=np.maximum(min_std, std),
+        p_bin=np.clip(p_bin, p_clip[0], p_clip[1]),
+        level=float(np.min(np.asarray(score)[elite_idx])),
+    )
 
-      mean  = smooth * elite mean + (1 - smooth) * prev["mean"]           (per continuous coordinate)
-      std   = max(min_std, smooth * elite std + (1 - smooth) * prev["std"])
-      p_bin = clip(smooth * elite frequency + (1 - smooth) * prev["p_bin"], *p_clip)  (per binary coordinate)
-      level = the lowest score inside the elite (how dangerous the elite already is)
-
-    Why the floors: a std that collapses to 0 or a probability of exactly 0/1 makes importance weights explode."""
-    raise NotImplementedError("TODO 5: cem_update")
-
-
-# ---------------------------------------------------------------- given
 
 def natural_proposal(nat: space.Natural) -> dict:
     return dict(mean=np.zeros(space.D), std=np.ones(space.D), p_bin=nat.p_bin.copy(), level=-math.inf)
@@ -43,7 +43,6 @@ def proposal_logpdf(prop, Z, Bn):
 
 
 def mixture_sample(prop, nat: space.Natural, n, rng, beta=0.2):
-    """Draw n rows from the defensive mixture (1 - beta) * proposal + beta * natural."""
     Z, Bn = proposal_sample(prop, n, rng)
     m = rng.random(n) < beta
     Zn, Bnn = nat.sample(int(m.sum()), rng)
