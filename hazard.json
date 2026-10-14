@@ -1,0 +1,38 @@
+{
+  "format": "avsim-studio/1",
+  "params": {
+    "cutT0": 5.0,
+    "cutDur": 2.4,
+    "cutV": 15.0,
+    "pedT0": 9.6,
+    "pedV": 1.45,
+    "busGo": 17.5,
+    "cutDs": -4.0,
+    "tgT": 0.9,
+    "mu": 0.8,
+    "cutGap": 12.0,
+    "cutBrake": 0.0,
+    "pedGap": 4.5,
+    "pedLook": 1,
+    "civil": true
+  },
+  "policy": {},
+  "hazards": [
+    {
+      "type": "brake",
+      "who": "L1",
+      "decel": 5.0,
+      "dur": 2.5,
+      "t0": 0.0,
+      "trig": 22.0
+    }
+  ],
+  "ego": "planner",
+  "space": {
+    "h0_decel": [3.0, 7.5],
+    "h0_dur": [1.0, 4.0],
+    "h0_trig": [8.0, 35.0]
+  },
+  "exposure": 0.05,
+  "why": "Lead-vehicle emergency braking is a plausible but intentionally stress-biased event. The ranges cover moderate-to-hard braking for 1-4 s and activation at an 8-35 m following gap; the simulator additionally rejects deceleration above mu*g. Exposure 0.05 per trip is a teaching assumption, not a measured road rate, and must be replaced by fleet near-miss/brake-event logs before deployment."
+}

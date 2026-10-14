@@ -1,0 +1,119 @@
+{
+ "file": "hazard.json",
+ "hazards": [
+  {
+   "who": "L1",
+   "decel": 5.0,
+   "dur": 2.5,
+   "t0": 0.0,
+   "trig": 22.0,
+   "type": "brake"
+  }
+ ],
+ "space": {
+  "h0_decel": [
+   3.0,
+   7.5
+  ],
+  "h0_dur": [
+   1.0,
+   4.0
+  ],
+  "h0_trig": [
+   8.0,
+   35.0
+  ]
+ },
+ "world": "town",
+ "exposure": 0.05,
+ "why": "Lead-vehicle emergency braking is a plausible but intentionally stress-biased event. The ranges cover moderate-to-hard braking for 1-4 s and activation at an 8-35 m following gap; the simulator additionally rejects deceleration above mu*g. Exposure 0.05 per trip is a teaching assumption, not a measured road rate, and must be replaced by fleet near-miss/brake-event logs before deployment.",
+ "exact": {
+  "planner": []
+ },
+ "infeasible": 135,
+ "accepted": 0.91,
+ "conditional_on": "your town's traffic",
+ "baseline": {
+  "n": 1365,
+  "crashes": 1,
+  "avoidable": 0,
+  "unavoidable": 0,
+  "unattributed": 1,
+  "low_speed": 0,
+  "avoidable_foreknown": 0,
+  "overlap_at_start": 0,
+  "by_hazard": {
+   "unattributed": 1
+  },
+  "examples": [
+   {
+    "params": {
+     "cutT0": 9.765178785956394,
+     "cutDur": 5.213213801439277,
+     "cutV": 16.874093270931482,
+     "cutDs": -5.583336979596646,
+     "pedT0": 16.684359913793774,
+     "pedV": 1.2678958335264312,
+     "busGo": 18.50916013115753,
+     "tgT": 1.0422129699004086,
+     "cutGap": 8.36311195272155,
+     "pedGap": 3.661920761772696,
+     "mu": 0.8,
+     "pedLook": 0,
+     "cutBrake": 0.0,
+     "civil": true,
+     "h0_decel": 6.84945718830406,
+     "h0_dur": 2.746832881942036,
+     "h0_trig": 28.846605546867362
+    },
+    "kind": "unattributed",
+    "low_speed": false,
+    "other": "C2",
+    "t": 12.75,
+    "v_ego": 2.0378952026367188,
+    "fire_t": null,
+    "brake_t": null
+   }
+  ],
+  "p": 0.0,
+  "lo": 0.0,
+  "hi": 0.0028064605868202714,
+  "per_trip": 0.0,
+  "per_trip_hi": 0.00014032302934101356
+ },
+ "chosen": {
+  "n": 1365,
+  "crashes": 0,
+  "avoidable": 0,
+  "unavoidable": 0,
+  "unattributed": 0,
+  "low_speed": 0,
+  "avoidable_foreknown": 0,
+  "overlap_at_start": 0,
+  "by_hazard": {},
+  "examples": [],
+  "p": 0.0,
+  "lo": 0.0,
+  "hi": 0.0028064605868202714,
+  "per_trip": 0.0,
+  "per_trip_hi": 0.00014032302934101356
+ },
+ "_run": {
+  "mssv": "202602839",
+  "town": "D",
+  "quick": false,
+  "step": "mine",
+  "salted": false,
+  "budgets": {
+   "replay_n": 400,
+   "mc_n": 3000,
+   "iters": 8,
+   "per_iter": 300,
+   "final_n": 600,
+   "seeds": 3,
+   "fix_n": 400,
+   "progress_n": 256,
+   "mine_n": 1500
+  }
+ }
+}
