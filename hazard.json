@@ -33,6 +33,6 @@
     "h0_dur": [1.0, 4.0],
     "h0_trig": [8.0, 35.0]
   },
-  "exposure": 0.05,
-  "why": "Lead-vehicle emergency braking is a plausible but intentionally stress-biased event. The ranges cover moderate-to-hard braking for 1-4 s and activation at an 8-35 m following gap; the simulator additionally rejects deceleration above mu*g. Exposure 0.05 per trip is a teaching assumption, not a measured road rate, and must be replaced by fleet near-miss/brake-event logs before deployment."
+  "exposure": 0.01,
+  "why": "Lead-vehicle emergency braking is a plausible but intentionally stress-biased event. The ranges cover moderate-to-hard braking for 1-4 s and activation at an 8-35 m following gap; the simulator additionally rejects deceleration above mu*g. FHWA reports over 36,000 crash, near-crash, and baseline events across over 5.4 million SHRP2 trips (about 0.0067 event/trip); exposure is conservatively rounded up to 0.01/trip. This is a broad safety-event proxy, not a measured lead-braking rate, and must be replaced by fleet-specific brake-event logs before deployment. Source: https://highways.dot.gov/safety/learn-safety/road-safety-fundamentals-html-version/unit-3-measuring-safety"
 }

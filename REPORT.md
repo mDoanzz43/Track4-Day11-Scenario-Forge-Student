@@ -46,7 +46,13 @@ Ngan sach IS la 16,800 rollout (`estimate.json: budget`), nho hon khoang 144,000
 ## 5. Cac kieu that bai (buoc C2 + 3D)
 
 - `bus_bypass`: C2 chen qua xe buyt dung, di cham o `x < 112 m`; ego tiep can va dam C2. Cuoc san tim 136 mau (`hunt.json: bus_bypass.found`). Anh can nop: `evidence/shots/bus_bypass.png`.
+
+![Bus bypass: ego va cham C2 luc lach qua xe buyt](evidence/shots/bus_bypass.png)
+
 - `crosswalk_block`: nguoi di bo P1 xuat hien sau xe buyt; ego phanh nhung than xe dung tren vach va chan duong P1. Cuoc san tim 13 mau (`hunt.json: crosswalk_block.found`). Anh can nop: `evidence/shots/crosswalk_block.png`.
+
+![Crosswalk block: ego dung chan loi nguoi di bo](evidence/shots/crosswalk_block.png)
+
 - Cuoc san `cut_in` khong tim dung mode, chi tim 5 `bus_bypass`; cuoc san `rear_ended` chi tim 5 `crosswalk_block` (`hunt.json: *.found`). Do do chua co bang chung failure cho hai mode muc tieu nay, khong phai bang chung xac suat bang 0.
 
 Neu chi dung mot cuoc san chung, CEM se co ve mode de tang score nhat va lap lai no. Ket qua tren cho thay ngay ca khi san rieng, objective `cut_in` va `rear_ended` van co the roi vao mode khac; san rieng tung mode la dieu kien can de tang do phu failure.
@@ -58,6 +64,8 @@ Policy duoc chon tren TRAIN la `{"cutinLat": 3.0}`. TRAIN: `fail = 2.1392e-6`, `
 Tren TEST doc lap, policy moi co `fail = 7.1929e-8`, `fail_hi_seen = 1.3647e-7`, nhung `fail_hi = 3.8779e-2` do `bus_bypass` la unseen; progress `216.65 m`, harsh `7.50`. Baseline TEST co `fail = 1.2942e-4`, `fail_hi_seen = 2.2698e-4`, `fail_hi = 1.5059e-3`, progress `216.75 m`, harsh `7.76` (`fix.json: chosen_test`, `baseline_test`). Vi zero-hit phai cong can `3/(0.2*n)`, can hop le cua ban sua co the lon hon baseline du point estimate tot hon.
 
 Tang `T` len 2.0 nghe co ve an toan hon vi tang khoang cach theo sau, nhung TRAIN van co `fail = 4.6845e-4`, kem xa `cutinLat = 2.6` (`3.0398e-5`). Trong the gioi phan ung, ego di cham/phanh som lam thay doi khe chuyen lan va phan ung xe sau; mot num cuc bo khong bao dam rui ro tong the giam. Anh so san can nop: `evidence/shots/policy_ghost.png` voi bong mo baseline.
+
+![Policy moi duoc ve mo so voi policy baseline](evidence/shots/policy_ghost.png)
 
 ## 7. Tu mo phong ra duong that
 
@@ -73,9 +81,11 @@ Xac suat nay khong bao phu: (1) mang duong ngoai mot doan pho va mot giao lo; (2
 
 **Rac roi.** Xe dan dau L1 phanh khan cap khi ego cach 8-35 m; do giam toc 3.0-7.5 m/s2 trong 1-4 s (`hazard.json: hazards`, `space`). Day mo phong phanh do vat can bat ngo. Planner co the xu ly kem neu IDM phan ung muon hoac phanh khong du manh.
 
-**Gia dinh.** `exposure = 0.05/trip` la gia dinh day hoc co chu dich stress test, khong phai tan suat da do; truoc trien khai phai thay bang fleet log su kien phanh/near-miss. Simulator loai deceleration vuot `mu*g`; 1,365/1,500 mau hop le, `accepted = 0.91` (`mine.json`).
+**Gia dinh.** FHWA bao cao hon 36,000 crash/near-crash/baseline event tren hon 5.4 trieu trip SHRP2, tuong duong khoang `0.0067 event/trip`; toi lam tron bao thu len `exposure = 0.01/trip` ([FHWA, Unit 3 - Measuring Safety](https://highways.dot.gov/safety/learn-safety/road-safety-fundamentals-html-version/unit-3-measuring-safety)). Day la proxy rong cho safety event, khong phai tan suat lead-braking rieng; truoc trien khai phai thay bang fleet log su kien phanh. Simulator loai deceleration vuot `mu*g`; 1,365/1,500 mau hop le, `accepted = 0.91` (`mine.json`).
 
-**Ket qua.** Scene chinh khong va cham (`mine.json: exact.planner = []`). Baseline co 1 va cham `unattributed`, 0 `avoidable`, 0 `unavoidable`, 0 `low_speed`; policy moi khong co va cham. Ca hai co P(loi planner | hazard) point estimate 0 va Wilson `[0, 2.8065e-3]`; can tan suat moi chuyen la `1.4032e-4`. Ket qua dung la planner da xu ly tot hazard trong ngan sach nay, khong phai hazard co rui ro bang 0. Anh can nop: `evidence/shots/hazard_brake.png` tai luc L1 phanh.
+**Ket qua.** Scene chinh khong va cham (`mine.json: exact.planner = []`). Baseline co 1 va cham `unattributed`, 0 `avoidable`, 0 `unavoidable`, 0 `low_speed`; policy moi khong co va cham. Ca hai co P(loi planner | hazard) point estimate 0 va Wilson `[0, 2.8065e-3]`; voi exposure moi, can tan suat moi chuyen la `2.8065e-5`. Ket qua dung la planner da xu ly tot hazard trong ngan sach nay, khong phai hazard co rui ro bang 0.
+
+![Hazard H0: xe dan dau phanh gap](evidence/shots/hazard_brake.png)
 
 `avoidable` la chuan lac quan theo mot huong vi oracle biet dung frame dau tien co the thay va phanh toi da ngay, nen co the dem nhieu hon kha nang cua planner that. Nguoc lai, oracle chi thu phanh ma khong danh lai, nen co the dem it hon nhung tinh huong mot planner day du co the tranh. Policy moi khong cai thien co the quan sat tren hazard nay vi baseline da xu ly duoc; cach sua cu the neu fleet log cho thay near-miss la them du doan phanh cua lead vehicle/jerk trigger va emergency braking theo TTC, sau do kiem thu lai tren TEST moi.
 
